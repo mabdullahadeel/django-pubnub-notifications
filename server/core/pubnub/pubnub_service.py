@@ -6,7 +6,7 @@ from pubnub.pnconfiguration import PNConfiguration
 from pubnub.pubnub import PubNub
 from pubnub.exceptions import PubNubException
 
-from server.users.models import User
+from users.models import User
 
 logger = logging.getLogger(__name__)
 
@@ -24,13 +24,19 @@ class PubNubService:
     
     @staticmethod
     def get_notification_token_for_user(user: User, ttl: int = DEFAULT_NOTIFICATION_TTL):
-        token_res = pubnub.grant_token() \
+        envalope = pubnub.grant_token() \
             .channels([Channel.id(user.get_notification_channel_name()).read().delete()]) \
             .ttl(ttl) \
             .authorized_uuid(user.get_notification_channel_name()) \
             .sync()
+        token = envalope.result.token
+        token_payload = pubnub.parse_token(token)
         
-        return token_res
+        return {
+            "exp_timestamp": token_payload["timestamp"],
+            "token": token,
+            "ttl": token_payload["ttl"],
+        }
     
     @staticmethod
     def send_notification_to_user(user: User, message):
