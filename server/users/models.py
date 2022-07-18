@@ -14,6 +14,9 @@ class User(AbstractUser):
     def __str__(self) -> str:
         return self.email + " " + self.id
     
+    def get_notification_channel_name(self) -> str:
+        return f"pn-noti-{self.id}"
+    
     class Meta:
         db_table = 'users'
 
