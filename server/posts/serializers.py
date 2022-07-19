@@ -1,3 +1,5 @@
+from asyncore import read, write
+from keyword import kwlist
 from django.http import HttpRequest
 from rest_framework import serializers
 from .models import Post, Comment
@@ -22,11 +24,12 @@ class PostSerializer(serializers.ModelSerializer):
     
 class CommentSerializer(serializers.ModelSerializer):
     user= UserPublicSerializer(read_only=True)
-    post_id = serializers.IntegerField(write_only=True)
     
     class Meta:
         model = Comment
-        fields = ('text')
+        fields = ('text', 'id', 'created_at', 'updated_at', 'user', 'post')
+        read_only_fields = ('id', 'created_at', 'updated_at', 'user', 'post')
+        
         
     def create(self, validated_data):
         user = None
@@ -36,7 +39,6 @@ class CommentSerializer(serializers.ModelSerializer):
             user = request.user
             
         validated_data['user'] = user
-        post = Post.objects.get(id=validated_data['post_id'])
-        validated_data['post'] = post
+        post = self.context.get('post', None)
         
-        return super().create(validated_data)
+        return Comment.objects.create(**validated_data, post=post)
