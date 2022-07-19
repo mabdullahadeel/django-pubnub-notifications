@@ -1,5 +1,3 @@
-from asyncore import read, write
-from keyword import kwlist
 from django.http import HttpRequest
 from rest_framework import serializers
 from .models import Post, Comment
