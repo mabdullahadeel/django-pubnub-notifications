@@ -13,7 +13,6 @@ def create_comment_notification(sender, instance, created, **kwargs):
     if created and author != commenter:
         author: User = instance.post.author
         commenter: User = instance.post.user
-        
         message = f'{commenter.username} commented on your post.',
         PubNubService.send_notification_to_user(user=author, message=message)
         logger.info("Notification sent to user: %s", author.username)
