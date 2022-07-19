@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "corsheaders",
     # custom apps
     "users.apps.UsersConfig",
+    "posts.apps.PostsConfig",
 ]
 
 MIDDLEWARE = [
