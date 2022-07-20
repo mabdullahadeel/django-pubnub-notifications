@@ -6,6 +6,7 @@ import { useAuth } from "../../hooks/useAuth";
 import { NextPageWithLayout } from "../../types/next.types";
 import toast from "react-hot-toast";
 import { useRouter } from "next/router";
+import AuthRoute from "../../components/Authenticated/AuthRoute";
 
 const Login: NextPageWithLayout = () => {
   const {
@@ -72,6 +73,10 @@ const Login: NextPageWithLayout = () => {
       </div>
     </div>
   );
+};
+
+Login.getLayout = (page: React.ReactNode) => {
+  return <AuthRoute>{page}</AuthRoute>;
 };
 
 export default Login;

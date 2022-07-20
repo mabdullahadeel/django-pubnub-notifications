@@ -4,6 +4,8 @@ import { Button, Input } from "../../components/Forms";
 import { NextPageWithLayout } from "../../types/next.types";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../hooks/useAuth";
+import toast from "react-hot-toast";
+import AuthRoute from "../../components/Authenticated/AuthRoute";
 
 const Register: NextPageWithLayout = () => {
   const {
@@ -22,10 +24,15 @@ const Register: NextPageWithLayout = () => {
 
   const onSubmit = async () => {
     try {
-      // await registerUser();
       const values = getValues();
-      console.log(values);
+      await registerUser({
+        email: values.email,
+        password: values.password,
+        username: values.username,
+      });
+      toast.success("Success");
     } catch (error) {
+      toast.error("Something went wrong. Please try again.");
       console.error(error);
     }
   };
@@ -94,6 +101,10 @@ const Register: NextPageWithLayout = () => {
       </div>
     </div>
   );
+};
+
+Register.getLayout = (page: React.ReactNode) => {
+  return <AuthRoute>{page}</AuthRoute>;
 };
 
 export default Register;
