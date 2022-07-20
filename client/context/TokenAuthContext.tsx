@@ -3,6 +3,7 @@ import type { MeResponse, UserRegisterPaylod } from "../types/user.types";
 import PropTypes from "prop-types";
 import { authApi } from "../services/authApi";
 import { resetSession, setSession, getSession } from "../utils/session";
+import { useRouter } from "next/router";
 
 interface AuthState {
   isInitialized: boolean;
@@ -108,6 +109,7 @@ export const AuthContext = createContext<AuthContextValue>({
 export const AuthProvider: FC<AuthProviderProps> = (props) => {
   const { children } = props;
   const [state, dispatch] = useReducer(reducer, initialAuthState);
+  const router = useRouter();
 
   useEffect(() => {
     const initialize = async (): Promise<void> => {
@@ -164,6 +166,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
   const logout = async (): Promise<void> => {
     resetSession();
     dispatch({ type: "LOGOUT" });
+    router.push("/login");
   };
 
   const register = async (payload: UserRegisterPaylod): Promise<void> => {

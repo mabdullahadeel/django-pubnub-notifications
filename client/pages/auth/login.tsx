@@ -1,12 +1,21 @@
 import Link from "next/link";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Button, Input } from "../../components/Forms";
+import {
+  Button,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  Heading,
+  Input,
+  useColorModeValue,
+  useToast,
+} from "@chakra-ui/react";
 import { useAuth } from "../../hooks/useAuth";
 import { NextPageWithLayout } from "../../types/next.types";
-import toast from "react-hot-toast";
 import { useRouter } from "next/router";
 import AuthRoute from "../../components/Authenticated/AuthRoute";
+import { ThemeToggler } from "../../components/ThemeToggler";
 
 const Login: NextPageWithLayout = () => {
   const {
@@ -20,6 +29,7 @@ const Login: NextPageWithLayout = () => {
       password: "",
     },
   });
+  const toast = useToast();
   const { login } = useAuth();
   const router = useRouter();
 
@@ -27,51 +37,86 @@ const Login: NextPageWithLayout = () => {
     try {
       const values = getValues();
       await login(values.email, values.password);
-      toast.success("Success");
+      toast({
+        title: "Success",
+        status: "success",
+      });
       const backTo = (router.query.backTo as string) || "/";
       router.push(backTo);
     } catch (_error) {
-      toast.error("Invalid email or password");
+      toast({
+        title: "Invalid email or password",
+        status: "error",
+      });
     }
   };
 
   return (
-    <div className="h-full flex justify-center items-center">
-      <div className="block p-6 rounded-lg shadow-lg bg-slate-800 max-w-sm h-fit">
-        <h5 className="text-2xl leading-tight font-bold mb-2 text-center">
-          Login
-        </h5>
+    <Flex height="100vh" alignItems="center" justifyContent="center">
+      <Flex
+        direction="column"
+        alignItems="center"
+        background={useColorModeValue("gray.100", "gray.700")}
+        p={12}
+        rounded={6}
+      >
+        <Heading mb={6}>Login</Heading>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Input
-            className="my-4"
-            placeholder="email"
-            error={errors.email && errors.email.message}
-            {...register("email", {
-              required: "This is required field",
-              pattern: {
-                value: /\S+@\S+\.\S+/,
-                message: "Invalid email address",
-              },
-            })}
-          />
-          <Input
-            className="my-4"
-            placeholder="password"
-            type="password"
-            error={errors.password && errors.password.message}
-            {...register("password", { required: "This is required field" })}
-          />
-          <Button className="my-4" type="submit" disabled={isSubmitting}>
+          <FormControl isInvalid={!!errors.email}>
+            <Input
+              placeholder="Email"
+              background={useColorModeValue("gray.300", "gray.600")}
+              type="email"
+              size="lg"
+              mt={6}
+              {...register("email", {
+                required: "This is required field",
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: "Invalid email address",
+                },
+              })}
+            />
+            <FormErrorMessage>
+              {errors.email && errors.email.message}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl isInvalid={!!errors.password}>
+            <Input
+              placeholder="Password"
+              background={useColorModeValue("gray.300", "gray.600")}
+              type="password"
+              size="lg"
+              mt={6}
+              {...register("password", {
+                required: "This is required field",
+              })}
+            />
+            <FormErrorMessage>
+              {errors.password && errors.password.message}
+            </FormErrorMessage>
+          </FormControl>
+          <Button
+            isLoading={isSubmitting}
+            loadingText="Logging in..."
+            width="100%"
+            colorScheme="red"
+            variant="outline"
+            mt={6}
+            mb={6}
+            type="submit"
+          >
             Login
           </Button>
         </form>
+        <ThemeToggler showLabel={true} />
         <Link href="/auth/register">
-          <a className="text-center text-sm text-slate-500 hover:text-slate-600">
-            Create an account
-          </a>
+          <Button width="100%" colorScheme="gray" variant="outline" mt={6}>
+            Register Instead
+          </Button>
         </Link>
-      </div>
-    </div>
+      </Flex>
+    </Flex>
   );
 };
 

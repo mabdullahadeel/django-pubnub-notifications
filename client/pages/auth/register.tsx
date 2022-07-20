@@ -1,17 +1,27 @@
+import {
+  Button,
+  Flex,
+  FormControl,
+  FormErrorMessage,
+  Heading,
+  Input,
+  useColorModeValue,
+  useToast,
+} from "@chakra-ui/react";
 import Link from "next/link";
 import React from "react";
-import { Button, Input } from "../../components/Forms";
 import { NextPageWithLayout } from "../../types/next.types";
 import { useForm } from "react-hook-form";
 import { useAuth } from "../../hooks/useAuth";
-import toast from "react-hot-toast";
 import AuthRoute from "../../components/Authenticated/AuthRoute";
+import { ThemeToggler } from "../../components/ThemeToggler";
 
 const Register: NextPageWithLayout = () => {
   const {
     handleSubmit,
     register,
     getValues,
+    setError,
     formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
@@ -21,6 +31,7 @@ const Register: NextPageWithLayout = () => {
     },
   });
   const { register: registerUser } = useAuth();
+  const toast = useToast();
 
   const onSubmit = async () => {
     try {
@@ -30,76 +41,116 @@ const Register: NextPageWithLayout = () => {
         password: values.password,
         username: values.username,
       });
-      toast.success("Success");
-    } catch (error) {
-      toast.error("Something went wrong. Please try again.");
+      toast({
+        title: "Success",
+        status: "success",
+      });
+    } catch (error: any) {
       console.error(error);
+      const validateError = error.response.data;
+      for (const key in validateError) {
+        setError(key as any, {
+          type: "manual",
+          message: validateError[key][0],
+        });
+      }
     }
   };
 
   return (
-    <div className="h-full flex justify-center items-center">
-      <div className="block p-6 rounded-lg shadow-lg bg-slate-800 max-w-sm h-fit">
-        <h5 className="text-2xl leading-tight font-bold mb-2 text-center">
-          Register
-        </h5>
+    <Flex height="100vh" alignItems="center" justifyContent="center">
+      <Flex
+        direction="column"
+        alignItems="center"
+        background={useColorModeValue("gray.100", "gray.700")}
+        p={12}
+        rounded={6}
+      >
+        <Heading mb={6}>Register</Heading>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <Input
-            className="my-4"
-            placeholder="email"
-            error={errors.email && errors.email.message}
-            {...register("email", {
-              required: "This is required field",
-              pattern: {
-                value: /\S+@\S+\.\S+/,
-                message: "Invalid email address",
-              },
-            })}
-          />
-          <Input
-            className="my-4"
-            placeholder="username"
-            error={errors.username && errors.username.message}
-            {...register("username", {
-              required: "This is required field",
-              minLength: {
-                value: 5,
-                message: "Username must be at least 5 characters",
-              },
-              maxLength: {
-                value: 20,
-                message: "Username must be at most 20 characters",
-              },
-            })}
-          />
-          <Input
-            className="my-4"
-            placeholder="password"
-            type="password"
-            error={errors.password && errors.password.message}
-            {...register("password", {
-              required: "This is required field",
-              minLength: {
-                value: 5,
-                message: "password must be at least 5 characters",
-              },
-              maxLength: {
-                value: 20,
-                message: "password must be at most 20 characters",
-              },
-            })}
-          />
-          <Button className="my-4" type="submit" disabled={isSubmitting}>
+          <FormControl isInvalid={!!errors.email}>
+            <Input
+              placeholder="Email"
+              background={useColorModeValue("gray.300", "gray.600")}
+              type="email"
+              size="lg"
+              mt={6}
+              {...register("email", {
+                required: "This is required field",
+              })}
+            />
+            <FormErrorMessage>
+              {errors.email && errors.email.message}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl isInvalid={!!errors.username}>
+            <Input
+              placeholder="username"
+              background={useColorModeValue("gray.300", "gray.600")}
+              type="text"
+              variant="filled"
+              size="lg"
+              mt={6}
+              {...register("username", {
+                required: "This filed is required",
+                minLength: {
+                  value: 5,
+                  message: "Username must be at least 5 characters",
+                },
+                maxLength: {
+                  value: 24,
+                  message: "Username must be at most 24 characters",
+                },
+              })}
+            />
+            <FormErrorMessage>
+              {errors.username && errors.username.message}
+            </FormErrorMessage>
+          </FormControl>
+          <FormControl isInvalid={!!errors.email}>
+            <Input
+              placeholder="Password"
+              background={useColorModeValue("gray.300", "gray.600")}
+              type="password"
+              size="lg"
+              mt={6}
+              {...register("password", {
+                required: "This is required field",
+                minLength: {
+                  value: 5,
+                  message: "Password must be at least 5 characters long",
+                },
+                maxLength: {
+                  value: 24,
+                  message: "Password must be at most 24 characters",
+                },
+              })}
+            />
+            <FormErrorMessage>
+              {errors.password && errors.password.message}
+            </FormErrorMessage>
+          </FormControl>
+          <Button
+            isLoading={isSubmitting}
+            loadingText="Creating account..."
+            width="100%"
+            colorScheme="green"
+            variant="outline"
+            mt={6}
+            mb={6}
+            type="submit"
+          >
             Register
           </Button>
         </form>
+        <ThemeToggler showLabel={true} />
         <Link href="/auth/login">
-          <a className="text-center text-sm text-slate-500 hover:text-slate-600">
-            Login instead
-          </a>
+          <Button width="100%" colorScheme="gray" variant="outline" mt={6}>
+            Login Instead
+          </Button>
         </Link>
-      </div>
-    </div>
+      </Flex>
+    </Flex>
   );
 };
 

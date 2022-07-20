@@ -1,9 +1,8 @@
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { AuthConsumer, AuthProvider } from "../context/TokenAuthContext";
-import { Loader } from "../components/Loader";
 import { NextPageWithLayout } from "../types/next.types";
-import { Toaster } from "../components/Toaster";
+import { ChakraProvider, Flex, Spinner } from "@chakra-ui/react";
 
 interface MyAppProps extends AppProps {
   Component: NextPageWithLayout;
@@ -14,26 +13,26 @@ function MyApp(props: MyAppProps) {
   const getLayout = Component.getLayout || ((page) => page);
 
   return (
-    <AuthProvider>
-      <AuthConsumer>
-        {(auth) =>
-          !auth.isInitialized ? (
-            <div className="flex h-screen w-screen align-center justify-center">
-              <Loader />
-            </div>
-          ) : (
-            getLayout(
-              <div className="h-screen w-screen bg-slate-900 text-white">
-                <>
-                  <Component {...pageProps} />
-                  <Toaster />
-                </>
-              </div>
+    <ChakraProvider>
+      <AuthProvider>
+        <AuthConsumer>
+          {(auth) =>
+            !auth.isInitialized ? (
+              <Flex
+                h="100vh"
+                w="100vw"
+                alignItems="center"
+                justifyContent="center"
+              >
+                <Spinner />
+              </Flex>
+            ) : (
+              getLayout(<Component {...pageProps} />)
             )
-          )
-        }
-      </AuthConsumer>
-    </AuthProvider>
+          }
+        </AuthConsumer>
+      </AuthProvider>
+    </ChakraProvider>
   );
 }
 
