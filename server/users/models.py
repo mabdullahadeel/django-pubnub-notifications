@@ -21,6 +21,7 @@ class User(AbstractUser):
         return f"pn-noti-{self.id}"
     
     class Meta:
+        unique_together = ('username', 'email')
         db_table = 'users'
 
 
