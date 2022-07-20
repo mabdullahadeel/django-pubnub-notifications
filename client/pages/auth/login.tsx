@@ -5,7 +5,6 @@ import { Button, Input } from "../../components/Forms";
 import { useAuth } from "../../hooks/useAuth";
 import { NextPageWithLayout } from "../../types/next.types";
 import toast from "react-hot-toast";
-import type { AxiosError } from "axios";
 import { useRouter } from "next/router";
 
 const Login: NextPageWithLayout = () => {
