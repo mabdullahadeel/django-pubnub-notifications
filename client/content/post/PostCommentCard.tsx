@@ -11,8 +11,11 @@ import {
   Text,
 } from "@chakra-ui/react";
 import React from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../../hooks/useAuth";
 import { Comment } from "../../types/post.types";
+import { postApi } from "../../services/postsApi";
+import { GET_POST_COMMENT } from "../../constants/queries";
 
 interface PostCommentCardProps {
   comment: Comment;
@@ -22,6 +25,14 @@ export const PostCommentCard: React.FC<PostCommentCardProps> = ({
   comment,
 }) => {
   const { user } = useAuth();
+  const queryClient = useQueryClient();
+
+  const deletaComment = useMutation(postApi.deleteComment, {
+    onSuccess: () => {
+      queryClient.invalidateQueries([GET_POST_COMMENT]); // refetching comments
+    },
+  });
+
   return (
     <VStack
       alignItems="flex-start"
@@ -61,7 +72,14 @@ export const PostCommentCard: React.FC<PostCommentCardProps> = ({
                 postId={comment.id}
                 openComponent={<MenuItem>Edit</MenuItem>}
               /> */}
-              <MenuItem onClick={() => {}}>Delete</MenuItem>
+              <MenuItem
+                disabled={deletaComment.isLoading}
+                onClick={() => {
+                  deletaComment.mutate({ commentId: comment.id });
+                }}
+              >
+                Delete
+              </MenuItem>
             </MenuList>
           </Menu>
         )}
