@@ -8,7 +8,7 @@ class PostSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Post
-        fields = ('id', 'title', 'text', 'author')
+        fields = ('id', 'title', 'text', 'author', 'created_at', 'updated_at')
     
     def create(self, validated_data):
         user = None

@@ -1,7 +1,7 @@
-from multiprocessing import context
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework import generics
+from rest_framework.pagination import LimitOffsetPagination
 
 from posts.serializers import PostSerializer, CommentSerializer
 from .models import Post, Comment
@@ -9,6 +9,7 @@ from .models import Post, Comment
 class PostListCreateView(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    pagination_class = LimitOffsetPagination
 
 
 class PostRetrieve(generics.RetrieveAPIView):

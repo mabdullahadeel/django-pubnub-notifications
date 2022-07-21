@@ -20,7 +20,17 @@ interface NavProps {}
 const Nav: React.FC<NavProps> = ({}) => {
   const { user, logout } = useAuth();
   return (
-    <Flex as="nav" px={10} h="90px" gap={10} alignItems="center">
+    <Flex
+      as="nav"
+      px={10}
+      h="90px"
+      gap={10}
+      alignItems="center"
+      position="sticky"
+      top={0}
+      zIndex={100}
+      bg="gray.800"
+    >
       <Box
         _hover={{
           cursor: "pointer",
@@ -50,7 +60,7 @@ const Nav: React.FC<NavProps> = ({}) => {
               bg: "transparent",
             }}
             as={Button}
-            leftIcon={<Avatar size="md" src="https://bit.ly/sage-avatar" />}
+            leftIcon={<Avatar size="md" name="John Doe" />}
           ></MenuButton>
           <MenuList>
             <MenuItem onClick={() => logout()}>Logout</MenuItem>

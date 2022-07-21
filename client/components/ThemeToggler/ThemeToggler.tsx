@@ -10,6 +10,7 @@ export const ThemeToggler = ({ showLabel = false, ...rest }) => {
         </FormLabel>
       )}
       <Switch
+        disabled={true}
         id="theme-toggler"
         size="lg"
         isChecked={colorMode === "dark"}

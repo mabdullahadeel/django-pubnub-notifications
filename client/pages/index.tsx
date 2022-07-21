@@ -1,18 +1,18 @@
-import { ReactNode, useContext } from "react";
+import Head from "next/head";
+import { ReactNode } from "react";
 import { Authenticated } from "../components/Authenticated";
-import { NotificationsContext } from "../context/NotificationsContext";
+import { HomePageContent } from "../content/home";
 import { DefaultLayout } from "../layout/DefaultLayout/DefaultLayout";
+import { NextPageWithLayout } from "../types/next.types";
 
-const Home = () => {
-  const { messages } = useContext(NotificationsContext);
+const Home: NextPageWithLayout = () => {
   return (
-    <div className="flex w-full align-center justify-center text-2xl py-10">
-      {messages.map((message) => (
-        <div key={message.id}>
-          {message.message} - {message.peek} = {message.id}
-        </div>
-      ))}
-    </div>
+    <>
+      <Head>
+        <title>DJ PubNbu - Home</title>
+      </Head>
+      <HomePageContent />
+    </>
   );
 };
 
