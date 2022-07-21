@@ -32,15 +32,25 @@ class PostUpdateDestroyView(generics.UpdateAPIView, generics.DestroyAPIView):
     def get_queryset(self):
         return super().get_queryset().filter(author=self.request.user)
 
-class CommentRetrieveCreateView(generics.RetrieveAPIView, generics.CreateAPIView):
+class CommentsLimitOffsetPagination(LimitOffsetPagination):
+    default_limit = 10
+    max_limit = 10
+    def __init__(self) -> None:
+        self.count = 10
+        super().__init__()
+
+class CommentRetrieveCreateView(generics.ListCreateAPIView, CommentsLimitOffsetPagination):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer
+    pagination_class = CommentsLimitOffsetPagination
     
-    def retrieve(self, request, *args, **kwargs):
+    def list(self, request, *args, **kwargs):
+        self.count = 10
         post = get_object_or_404(Post, id=kwargs.get('post_id'))
         comments = Comment.objects.filter(post=post)
-        serializer = self.serializer_class(comments, context={'request': request, 'post': post}, many=True)
-        return Response(data=serializer.data, status=200)
+        res = self.paginate_queryset(comments)
+        serializer = self.serializer_class(res, context={'request': request, 'post': post}, many=True)
+        return self.get_paginated_response(serializer.data)
         
     def create(self, request, *args, **kwargs):
         post = get_object_or_404(Post, id=kwargs.get('post_id'))

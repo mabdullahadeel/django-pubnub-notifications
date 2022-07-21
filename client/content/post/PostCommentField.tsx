@@ -8,8 +8,9 @@ import {
 } from "@chakra-ui/react";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { postApi } from "../../services/postsApi";
+import { GET_POST_COMMENT } from "../../constants/queries";
 
 interface PostCommentFieldProps {
   postId: string;
@@ -30,9 +31,11 @@ export const PostCommentField: React.FC<PostCommentFieldProps> = ({
     },
   });
   const toast = useToast();
+  const queryClient = useQueryClient();
 
   const createComment = useMutation(postApi.createComment, {
     onSuccess: () => {
+      queryClient.invalidateQueries([GET_POST_COMMENT]); // refetching comments
       resetCommentForm();
       toast({
         title: "Comment created",
@@ -77,7 +80,9 @@ export const PostCommentField: React.FC<PostCommentFieldProps> = ({
             {errors.text && errors.text.message}
           </FormErrorMessage>
         </FormControl>
-        <Button colorScheme="red">Comment</Button>
+        <Button colorScheme="red" onClick={onSubmit}>
+          Comment
+        </Button>
       </HStack>
     </form>
   );

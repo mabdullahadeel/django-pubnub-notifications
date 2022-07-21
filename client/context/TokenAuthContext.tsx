@@ -181,7 +181,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
   const logout = async (): Promise<void> => {
     resetSession();
     dispatch({ type: "LOGOUT" });
-    router.push("/login");
+    router.push("/auth/login");
   };
 
   const register = async (payload: UserRegisterPaylod): Promise<void> => {

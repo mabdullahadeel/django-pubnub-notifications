@@ -1,22 +1,22 @@
 import Head from "next/head";
 import { ReactNode } from "react";
 import { Authenticated } from "../../components/Authenticated";
-import { MyPosts } from "../../content/post";
+import { PostDetailContent } from "../../content/post";
 import { DefaultLayout } from "../../layout/DefaultLayout/DefaultLayout";
 import { NextPageWithLayout } from "../../types/next.types";
 
-const MyPostsPage: NextPageWithLayout = () => {
+const PostDetailsPage: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>DJ PubNub - My Posts</title>
+        <title>DJ PubNub - Post</title>
       </Head>
-      <MyPosts />
+      <PostDetailContent />
     </>
   );
 };
 
-MyPostsPage.getLayout = (page: ReactNode) => {
+PostDetailsPage.getLayout = (page: ReactNode) => {
   return (
     <Authenticated>
       <DefaultLayout>{page}</DefaultLayout>
@@ -24,4 +24,4 @@ MyPostsPage.getLayout = (page: ReactNode) => {
   );
 };
 
-export default MyPostsPage;
+export default PostDetailsPage;

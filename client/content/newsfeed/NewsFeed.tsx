@@ -1,46 +1,27 @@
 import {
   AbsoluteCenter,
-  Avatar,
   Box,
   Button,
   Center,
-  Divider,
-  Flex,
-  HStack,
-  Input,
-  Menu,
-  MenuButton,
-  MenuItem,
-  MenuList,
   Spinner,
   Text,
-  VStack,
-  useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useRef } from "react";
-import {
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { postApi } from "../../services/postsApi";
 import { getQueryParamsFromURL } from "../../utils/query";
 import { useInView } from "framer-motion";
 import { CreateOrUpdatePostModal } from "../post/CreateOrUpdatePostModal";
 import { POST_QUERY } from "../../constants/queries";
-import { useAuth } from "../../hooks/useAuth";
-import { PostCommentField } from "../post";
+import { PostCard } from "../post";
 
 interface NewsFeedProps {
   author?: 0 | 1;
 }
 
 export const NewsFeed: React.FC<NewsFeedProps> = ({ author = 0 }) => {
-  const { user } = useAuth();
   const ref = useRef(null);
   const inView = useInView(ref);
-  const queryClient = useQueryClient();
-  const toast = useToast();
 
   const {
     data,
@@ -69,16 +50,6 @@ export const NewsFeed: React.FC<NewsFeedProps> = ({ author = 0 }) => {
       staleTime: 60 * 3 * 1000, // 3 minutes,
     }
   );
-
-  const deletePost = useMutation(postApi.deletePost, {
-    onSuccess: () => {
-      toast({
-        title: "Success",
-        status: "success",
-      });
-      queryClient.invalidateQueries([POST_QUERY]);
-    },
-  });
 
   useEffect(() => {
     if (inView) {
@@ -135,65 +106,7 @@ export const NewsFeed: React.FC<NewsFeedProps> = ({ author = 0 }) => {
         data.pages?.map((page) => (
           <React.Fragment key={page.data.next}>
             {page.data.results.map((post) => (
-              <VStack
-                key={post.id}
-                alignItems="flex-start"
-                bg="gray.700"
-                p={4}
-                borderRadius={5}
-                w="100%"
-                mb={4}
-              >
-                <Flex w="100%" justifyContent="space-between">
-                  <HStack>
-                    <Avatar
-                      size={["sm", "md", "lg"]}
-                      name={
-                        post.author.first_name
-                          ? `${post.author.first_name} ${post.author.last_name}`
-                          : post.author.username
-                      }
-                    />
-                    <VStack alignItems="flex-start">
-                      <Text
-                        fontSize={["large", "medium", "larger", "2xl"]}
-                        fontWeight="bold"
-                      >
-                        @{post.author.username}
-                      </Text>
-                      <Text fontSize="small" color="gray.500">
-                        {new Date(post.created_at).toLocaleString()}
-                      </Text>
-                    </VStack>
-                  </HStack>
-                  {post.author.id === user?.user.id && (
-                    <Menu>
-                      <MenuButton as={Button}>...</MenuButton>
-                      <MenuList>
-                        <CreateOrUpdatePostModal
-                          postId={post.id}
-                          openComponent={<MenuItem>Edit</MenuItem>}
-                        />
-                        <MenuItem
-                          onClick={() => deletePost.mutate({ postId: post.id })}
-                        >
-                          Delete
-                        </MenuItem>
-                      </MenuList>
-                    </Menu>
-                  )}
-                </Flex>
-                <Text
-                  fontSize={["large", "medium", "xl"]}
-                  fontWeight="bold"
-                  pb={6}
-                >
-                  {post.title}
-                </Text>
-                <Text>{post.text}</Text>
-                <Divider py={1} />
-                <PostCommentField postId={post.id} />
-              </VStack>
+              <PostCard post={post} key={post.id} />
             ))}
           </React.Fragment>
         ))
