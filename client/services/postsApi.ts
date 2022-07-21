@@ -19,6 +19,9 @@ interface PostAPI {
     title: string, text: string
   }) => ReturnType<typeof axiosInstance.post<PostResponse>>;
   deletePost: ({postId}: {postId: string}) => ReturnType<typeof axiosInstance.delete>;
+  createComment: ({postId, text}: {postId: string, text: string}) => ReturnType<typeof axiosInstance.post>;
+  deleteComment: ({commentId}: {commentId: string}) => ReturnType<typeof axiosInstance.delete>;
+  updateComment: ({commentId, text}: {commentId: string, text: string}) => ReturnType<typeof axiosInstance.patch>;
 }
 
 export const postApi: PostAPI = {
@@ -49,5 +52,17 @@ export const postApi: PostAPI = {
   deletePost({postId}) {
     const path = `/posts/${postId}/`;
     return axiosInstance.delete(path)
+  },
+  createComment({postId, text}) {
+    const path = `/posts/comments/${postId}/`;
+    return axiosInstance.post(path, {text})
+  },
+  deleteComment({commentId}) {
+    const path = `posts/comments/ops/${commentId}/`;
+    return axiosInstance.delete(path)
+  },
+  updateComment({commentId, text}) {
+    const path = `posts/comments/ops/${commentId}/`;
+    return axiosInstance.patch(path, {text})
   }
 };

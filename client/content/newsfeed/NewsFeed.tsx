@@ -29,6 +29,7 @@ import { useInView } from "framer-motion";
 import { CreateOrUpdatePostModal } from "../post/CreateOrUpdatePostModal";
 import { POST_QUERY } from "../../constants/queries";
 import { useAuth } from "../../hooks/useAuth";
+import { PostCommentField } from "../post";
 
 interface NewsFeedProps {
   author?: 0 | 1;
@@ -191,10 +192,7 @@ export const NewsFeed: React.FC<NewsFeedProps> = ({ author = 0 }) => {
                 </Text>
                 <Text>{post.text}</Text>
                 <Divider py={1} />
-                <HStack w="100%">
-                  <Input flex={1} placeholder="Add a comment" />
-                  <Button colorScheme="red">Done</Button>
-                </HStack>
+                <PostCommentField postId={post.id} />
               </VStack>
             ))}
           </React.Fragment>

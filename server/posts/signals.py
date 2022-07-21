@@ -13,9 +13,8 @@ logger = logging.getLogger(__name__)
 def create_comment_notification(sender, instance: Comment, created, **kwargs):
     author: User = instance.post.author
     commenter: User = instance.user
-    post = instance.post
-    # if created and author != commenter:
-    if author != commenter:
+    if created and author != commenter:
+    # if author != commenter:
         message = {
             "message": f'{commenter.username} commented on your post.',
             "peek": f'{instance.text[0:10]}...',
