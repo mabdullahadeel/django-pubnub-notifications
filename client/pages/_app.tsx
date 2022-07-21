@@ -2,10 +2,11 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { AuthConsumer, AuthProvider } from "../context/TokenAuthContext";
 import { NextPageWithLayout } from "../types/next.types";
-import { ChakraProvider, Flex, Spinner } from "@chakra-ui/react";
+import { AbsoluteCenter, ChakraProvider, Spinner } from "@chakra-ui/react";
 import { PubNubProvider } from "pubnub-react";
 import { NotificationProvider } from "../context/NotificationsContext";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 import PubNub from "pubnub";
 
@@ -39,14 +40,9 @@ function MyApp(props: MyAppProps) {
             <AuthConsumer>
               {(auth) =>
                 !auth.isInitialized ? (
-                  <Flex
-                    h="100vh"
-                    w="100vw"
-                    alignItems="center"
-                    justifyContent="center"
-                  >
+                  <AbsoluteCenter>
                     <Spinner />
-                  </Flex>
+                  </AbsoluteCenter>
                 ) : (
                   getLayout(
                     <NotificationProvider>
@@ -57,6 +53,7 @@ function MyApp(props: MyAppProps) {
               }
             </AuthConsumer>
           </AuthProvider>
+          <ReactQueryDevtools position="bottom-right" initialIsOpen={false} />
         </QueryClientProvider>
       </PubNubProvider>
     </ChakraProvider>

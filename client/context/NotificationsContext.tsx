@@ -42,7 +42,6 @@ export const NotificationProvider: React.FC<React.PropsWithChildren> = ({
 
   const handleMessage = (event: MessageEvent) => {
     const newMessage: NotificationMessage = event.message[0];
-    console.log(newMessage);
     if (newMessage.peek && newMessage.message) {
       setMessages((prev) => [newMessage, ...prev]);
     }

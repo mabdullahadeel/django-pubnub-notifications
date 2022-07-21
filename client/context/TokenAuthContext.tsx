@@ -1,4 +1,11 @@
-import { FC, ReactNode, createContext, useEffect, useReducer } from "react";
+import {
+  FC,
+  ReactNode,
+  createContext,
+  useEffect,
+  useReducer,
+  useRef,
+} from "react";
 import type { MeResponse, UserRegisterPaylod } from "../types/user.types";
 import PropTypes from "prop-types";
 import { authApi } from "../services/authApi";
@@ -110,10 +117,14 @@ export const AuthContext = createContext<AuthContextValue>({
 export const AuthProvider: FC<AuthProviderProps> = (props) => {
   const { children } = props;
   const [state, dispatch] = useReducer(reducer, initialAuthState);
+  const rendered = useRef(false);
   const router = useRouter();
   const pubnub = usePubNub();
 
   useEffect(() => {
+    if (rendered.current) {
+      return;
+    }
     const initialize = async (): Promise<void> => {
       try {
         const accessToken = getSession();
@@ -150,6 +161,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     };
 
     initialize();
+    rendered.current = true;
   }, []);
 
   const login = async (email: string, password: string): Promise<void> => {

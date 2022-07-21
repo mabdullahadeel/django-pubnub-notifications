@@ -44,6 +44,6 @@ class PubNubService:
             pubnub.publish() \
             .channel(user.get_notification_channel_name()) \
             .message(message) \
-            .sync()
+            .use_post()
         except PubNubException as e:
             logger.error(e)

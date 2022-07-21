@@ -9,9 +9,11 @@ export interface Post {
   author: User;
 }
 
-export interface PostResponse {
+export interface PostListResponse {
   count: number;
   next: string | null;
   previous: string | null;
   results: Post[];
 }
+
+export interface PostResponse extends Post {}

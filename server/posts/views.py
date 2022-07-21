@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from requests import request
 from rest_framework.response import Response
 from rest_framework import generics
 from rest_framework.pagination import LimitOffsetPagination
@@ -10,6 +11,12 @@ class PostListCreateView(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
     pagination_class = LimitOffsetPagination
+    
+    def get_queryset(self):
+        filter_author = self.request.GET.get('author', 0)
+        if (filter_author == "1"):
+            return self.queryset.filter(author=self.request.user)
+        return super().get_queryset()
 
 
 class PostRetrieve(generics.RetrieveAPIView):
