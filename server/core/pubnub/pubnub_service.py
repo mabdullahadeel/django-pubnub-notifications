@@ -46,4 +46,4 @@ class PubNubService:
             .message(message) \
             .sync()
         except PubNubException as e:
-            logger.error(e._errormsg)
+            logger.error(e)

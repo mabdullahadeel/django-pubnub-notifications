@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 import { authApi } from "../services/authApi";
 import { resetSession, setSession, getSession } from "../utils/session";
 import { useRouter } from "next/router";
+import { usePubNub } from "pubnub-react";
 
 interface AuthState {
   isInitialized: boolean;
@@ -110,15 +111,16 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
   const { children } = props;
   const [state, dispatch] = useReducer(reducer, initialAuthState);
   const router = useRouter();
+  const pubnub = usePubNub();
 
   useEffect(() => {
     const initialize = async (): Promise<void> => {
       try {
         const accessToken = getSession();
-        console.log(accessToken);
         if (accessToken) {
           setSession(accessToken);
           const { data: user } = await authApi.me();
+          initializePubNub(user);
           dispatch({
             type: "INITIALIZE",
             payload: {
@@ -154,6 +156,7 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
     const { data } = await authApi.login({ username: email, password });
     setSession(data.token);
     const { data: user } = await authApi.me();
+    initializePubNub(user);
 
     dispatch({
       type: "LOGIN",
@@ -180,6 +183,11 @@ export const AuthProvider: FC<AuthProviderProps> = (props) => {
         user,
       },
     });
+  };
+
+  const initializePubNub = (user: MeResponse) => {
+    pubnub.setUUID(user.user.id);
+    pubnub.setAuthKey(user.pn_token.token);
   };
 
   return (

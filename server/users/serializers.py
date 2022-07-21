@@ -4,6 +4,7 @@ from .models import User
 
 
 class UserPublicSerializer(serializers.ModelSerializer):
+    pn_uuid_key = serializers.CharField(source='get_notification_channel_name', read_only=True)
     class Meta:
         model = User
         exclude = ("password", "is_superuser", "date_joined", "groups", "user_permissions")

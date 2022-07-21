@@ -1,5 +1,6 @@
 export interface User {
   id: string;
+  pn_uuid_key: string;
   last_login: Date;
   username: string;
   first_name: string;
