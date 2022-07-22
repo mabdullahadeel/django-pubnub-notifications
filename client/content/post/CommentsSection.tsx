@@ -51,7 +51,7 @@ export const CommentsSection: React.FC<CommentsSectionProps> = ({ postId }) => {
         const nextPageUrlParams = getQueryParamsFromURL(nextPageUrl ?? "");
         return nextPageUrlParams ?? undefined;
       },
-      staleTime: 60 * 3 * 1000, // 3 minutes,
+      staleTime: 30 * 1000, // 30 seconds,
     }
   );
 

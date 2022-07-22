@@ -50,7 +50,7 @@ export const CreateOrUpdatePostModal: React.FC<CreateOrEditPostMoadlProps> = ({
   const { isFetching } = useQuery([GET_ONE_POST, postId!], postApi.getOnePost, {
     enabled: !!postId,
     onSuccess: (data) => {
-      reset({ title: data.data.text, text: data.data.text || "" });
+      reset({ title: data.data.title, text: data.data.text || "" });
     },
     onError: () => closeModal(),
     staleTime: 10 * 1000,
@@ -66,7 +66,7 @@ export const CreateOrUpdatePostModal: React.FC<CreateOrEditPostMoadlProps> = ({
 
   const updatePost = useMutation(postApi.updatePost, {
     onSuccess: () => {
-      queryClient.invalidateQueries([POST_QUERY]);
+      queryClient.invalidateQueries([POST_QUERY, GET_ONE_POST]);
       toast({
         title: "Success",
         status: "success",

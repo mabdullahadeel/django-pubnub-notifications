@@ -41,7 +41,7 @@ export const NotificationProvider: React.FC<React.PropsWithChildren> = ({
   const pubnub = usePubNub();
   const { isAuthenticated, user } = useAuth();
 
-  useQuery(
+  const {} = useQuery(
     [GET_NOTIFICATIONS],
     () =>
       pubnub.fetchMessages({
@@ -51,7 +51,7 @@ export const NotificationProvider: React.FC<React.PropsWithChildren> = ({
     {
       onSuccess: (m) => {
         if (user) {
-          const prevMessages = m.channels[user?.user.pn_uuid_key];
+          const prevMessages = m.channels[user.user.pn_uuid_key];
           setMessages((m) => [...m, ...((prevMessages as any) || [])]);
         }
       },
@@ -79,6 +79,11 @@ export const NotificationProvider: React.FC<React.PropsWithChildren> = ({
 
       return () => {
         console.log("unmounting from the notification");
+        if (pubnub.getSubscribedChannels().includes(user.user.pn_uuid_key)) {
+          pubnub.unsubscribe({
+            channels: [user.user.pn_uuid_key],
+          });
+        }
       };
     }
   }, [isAuthenticated, user, pubnub]);
