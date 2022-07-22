@@ -1,7 +1,7 @@
 import axios from "axios";
 import { resetSession } from "../utils/session";
 
-const baseURL = "http://localhost:8000/";
+const baseURL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000/";
 
 const axiosInstance = axios.create({
   baseURL,
