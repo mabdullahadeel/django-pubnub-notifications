@@ -9,7 +9,7 @@ const Home: NextPageWithLayout = () => {
   return (
     <>
       <Head>
-        <title>DJ PubNbu - Home</title>
+        <title>DJ PubNub - Home</title>
       </Head>
       <HomePageContent />
     </>

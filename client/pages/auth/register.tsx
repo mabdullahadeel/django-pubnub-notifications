@@ -143,7 +143,7 @@ const Register: NextPageWithLayout = () => {
             Register
           </Button>
         </form>
-        <ThemeToggler showLabel={true} />
+        {/* <ThemeToggler showLabel={true} /> */}
         <Link href="/auth/login">
           <Button width="100%" colorScheme="gray" variant="outline" mt={6}>
             Login Instead

@@ -66,7 +66,6 @@ const Login: NextPageWithLayout = () => {
             <Input
               placeholder="Email"
               background={useColorModeValue("gray.300", "gray.600")}
-              type="email"
               size="lg"
               mt={6}
               {...register("email", {
@@ -109,7 +108,7 @@ const Login: NextPageWithLayout = () => {
             Login
           </Button>
         </form>
-        <ThemeToggler showLabel={true} />
+        {/* <ThemeToggler showLabel={true} /> */}
         <Link href="/auth/register">
           <Button width="100%" colorScheme="gray" variant="outline" mt={6}>
             Register Instead

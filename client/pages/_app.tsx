@@ -37,21 +37,19 @@ function MyApp(props: MyAppProps) {
       <PubNubProvider client={pubnub}>
         <QueryClientProvider client={client}>
           <AuthProvider>
-            <AuthConsumer>
-              {(auth) =>
-                !auth.isInitialized ? (
-                  <AbsoluteCenter>
-                    <Spinner />
-                  </AbsoluteCenter>
-                ) : (
-                  getLayout(
-                    <NotificationProvider>
-                      <Component {...pageProps} />
-                    </NotificationProvider>
+            <NotificationProvider>
+              <AuthConsumer>
+                {(auth) =>
+                  !auth.isInitialized ? (
+                    <AbsoluteCenter>
+                      <Spinner />
+                    </AbsoluteCenter>
+                  ) : (
+                    getLayout(<Component {...pageProps} />)
                   )
-                )
-              }
-            </AuthConsumer>
+                }
+              </AuthConsumer>
+            </NotificationProvider>
           </AuthProvider>
           <ReactQueryDevtools position="bottom-right" initialIsOpen={false} />
         </QueryClientProvider>

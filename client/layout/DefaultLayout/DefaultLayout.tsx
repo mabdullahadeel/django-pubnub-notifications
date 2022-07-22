@@ -1,4 +1,4 @@
-import { Box, Container } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
 import React from "react";
 import { PageBodyContainer } from "../../components/shared/Containers";
 import Nav from "./Nav";

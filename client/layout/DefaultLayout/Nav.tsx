@@ -14,6 +14,7 @@ import Link from "next/link";
 import React from "react";
 import { ThemeToggler } from "../../components/ThemeToggler";
 import { useAuth } from "../../hooks/useAuth";
+import { NotificationsPanel } from "./NotificationsPanel";
 
 interface NavProps {}
 
@@ -45,6 +46,7 @@ const Nav: React.FC<NavProps> = ({}) => {
         </Link>
       </Flex>
       <HStack>
+        <NotificationsPanel />
         <Text fontSize="large">{user?.user.username}</Text>
         <Menu>
           <MenuButton
