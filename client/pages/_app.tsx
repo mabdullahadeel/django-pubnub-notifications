@@ -14,6 +14,7 @@ const pubnub = new PubNub({
   publishKey: process.env.NEXT_PUBLIC_PUBNUB_PUBLISH_KEY!,
   subscribeKey: process.env.NEXT_PUBLIC_PUBNUB_SUBSCRIBE_KEY!,
   uuid: process.env.NEXT_PUBLIC_DEFAULT_PUBNUB_UUID!,
+  ssl: process.env.NEXT_PUBLIC_PUBNUB_USE_SSL === "true",
 });
 
 const client = new QueryClient({
