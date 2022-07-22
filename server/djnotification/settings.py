@@ -23,13 +23,16 @@ env.read_env(os.path.join(BASE_DIR, '.env'))
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-wd2k8-&ey&r+qr&tb^f&cm_9pv9j250^kiui10*4p1vz*$$ze#'
+SECRET_KEY = env('DAJNGO_SECRET_KEY', default='django-insecure-wd2k8-&ey&r+qr&tb^f&cm_9pv9j250^kiui10*4p1vz*$$ze#changeME')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env.bool('DJANGO_DEBUG', default=False)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['localhost:8000', '127.0.0.1', 'localhost']
 
+BE_SERVER_URL = env.str('BE_SERVER_URL', default='')
+if BE_SERVER_URL and BE_SERVER_URL not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(BE_SERVER_URL)
 
 # Application definition
 
@@ -86,10 +89,7 @@ WSGI_APPLICATION = 'djnotification.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+    'default': env.db_url('DATABASE_URL', default='sqlite:///db.sqlite3'),
 }
 
 
@@ -147,6 +147,9 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
+FRONTEND_URL = env.str('FRONTEND_URL', default='')
+if FRONTEND_URL and FRONTEND_URL not in CORS_ALLOWED_ORIGINS:
+    CORS_ALLOWED_ORIGINS.append(FRONTEND_URL)
 
 # Pubnub
 PUBNUB_PUBLISH_KEY = env.str('PUBNUB_PUBLISH_KEY')
