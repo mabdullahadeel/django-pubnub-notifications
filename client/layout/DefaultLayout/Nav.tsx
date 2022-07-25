@@ -27,24 +27,17 @@ const Nav: React.FC<NavProps> = ({}) => {
       h="90px"
       gap={10}
       alignItems="center"
+      justifyContent={{
+        base: "flex-end",
+        sm: "space-between",
+        md: "flex-end",
+        lg: "flex-end",
+      }}
       position="sticky"
       top={0}
       zIndex={100}
       bg="gray.800"
     >
-      <Box
-        _hover={{
-          cursor: "pointer",
-        }}
-      ></Box>
-      <Flex flex={1} gap={20}>
-        <Link href="/">
-          <Button>Feed</Button>
-        </Link>
-        <Link href="/posts/my">
-          <Button>My Posts</Button>
-        </Link>
-      </Flex>
       <HStack>
         <NotificationsPanel />
         <Text fontSize="large">{user?.user.username}</Text>
