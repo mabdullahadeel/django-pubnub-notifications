@@ -11,6 +11,7 @@ import * as gtag from "../utils/gtag";
 
 import PubNub from "pubnub";
 import Script from "next/script";
+import Head from "next/head";
 
 const pubnub = new PubNub({
   publishKey: process.env.NEXT_PUBLIC_PUBNUB_PUBLISH_KEY!,
@@ -37,6 +38,35 @@ function MyApp(props: MyAppProps) {
 
   return (
     <>
+      <Head>
+        <title>DJ PubNub</title>
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:site" content="@django_pubnub" />
+        <meta
+          property="twitter:image"
+          content="https://django-pubnub.vercel.app/django-pubnub.jpg"
+        />
+        <meta property="og:title" content="django-pubnub.vercel.app" />
+        <meta property="og:url" content="https://django-pubnub.vercel.app/" />
+        <meta name="description" content="Let's mess around with friends" />
+        <link rel="icon" href="/favicon.ico" />
+        <meta
+          property="og:description"
+          content="Let's mess around with friends"
+        />
+        <meta
+          property="og:image"
+          content="https://django-pubnub.vercel.app/django-pubnub.jpg"
+        />
+        <meta
+          property="og:image:url"
+          content="https://django-pubnub.vercel.app/django-pubnub.jpg"
+        />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1, maximum-scale=1"
+        />
+      </Head>
       <Script
         strategy="afterInteractive"
         src={`https://www.googletagmanager.com/gtag/js?id=${gtag.GA_TRACKING_ID}`}
