@@ -1,4 +1,4 @@
-import { Comment, CommentListResponse, CommentResponse, PostListResponse, PostResponse } from "../types/post.types";
+import { CommentListResponse, CommentResponse, PostListResponse, PostResponse } from "../types/post.types";
 import axiosInstance from "./axios";
 
 interface PostAPI {

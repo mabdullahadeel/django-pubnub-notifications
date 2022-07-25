@@ -68,10 +68,6 @@ export const PostCommentCard: React.FC<PostCommentCardProps> = ({
           <Menu>
             <MenuButton as={Button}>...</MenuButton>
             <MenuList>
-              {/* <CreateOrUpdatePostModal
-                postId={comment.id}
-                openComponent={<MenuItem>Edit</MenuItem>}
-              /> */}
               <MenuItem
                 disabled={deletaComment.isLoading}
                 onClick={() => {

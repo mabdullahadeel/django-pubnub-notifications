@@ -64,9 +64,15 @@ export const PostCommentField: React.FC<PostCommentFieldProps> = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} style={{ width: "100%" }}>
-      <HStack w="100%" alignItems="flex-start">
+      <HStack
+        w="100%"
+        alignItems="flex-start"
+        flexDirection={{ sm: "column", md: "row", lg: "row", base: "column" }}
+        spacing={1}
+      >
         <FormControl flex={1} isInvalid={!!errors.text}>
           <Input
+            mb={2}
             placeholder="Post a comment..."
             {...register("text", {
               required: "This is required field",
@@ -80,7 +86,12 @@ export const PostCommentField: React.FC<PostCommentFieldProps> = ({
             {errors.text && errors.text.message}
           </FormErrorMessage>
         </FormControl>
-        <Button colorScheme="red" onClick={onSubmit}>
+        <Button
+          mb={2}
+          w={{ lg: "auto", md: "auto", sm: "100%", base: "100%" }}
+          colorScheme="red"
+          onClick={onSubmit}
+        >
           Comment
         </Button>
       </HStack>
