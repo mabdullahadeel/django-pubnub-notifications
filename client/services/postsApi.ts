@@ -3,7 +3,8 @@ import axiosInstance from "./axios";
 
 interface PostAPI {
   listPosts: (p: {
-    queryKey: [string, { [key: string]: string | number | null }]
+    queryKey: [string, { [key: string]: string | number | null }],
+    pageParam?: { [key: string]: string | number | null },
   }) => ReturnType<typeof axiosInstance.get<PostListResponse>>;
   getOnePost: (p: {
     queryKey: [string, string]
@@ -28,14 +29,16 @@ interface PostAPI {
 }
 
 export const postApi: PostAPI = {
-  listPosts: ({
-    queryKey,
-  }) => {
+  listPosts: ({queryKey, pageParam}) => {
     const [_, queryParams] = queryKey;
     const path = `/posts/?`;
     const params = new URLSearchParams();
-    Object.keys(queryParams).forEach((key) => {
-      params.append(key, String(queryParams[key]) || "");
+    const p = {
+      ...queryParams,
+      ...(pageParam || {})
+    }
+    Object.keys(p).forEach((key) => {
+      params.append(key, String(p[key]) || "");
     });
     return axiosInstance.get(path + params.toString());
   },

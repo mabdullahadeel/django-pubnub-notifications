@@ -3,5 +3,5 @@ export const getQueryParamsFromURL = (url: string) => {
   const search = url.split("?")[1];
   if (!search) return {};
   const paramsObj = Object.fromEntries(new URLSearchParams(search));
-  return Object.keys(paramsObj) ? null : paramsObj;
+  return Object.keys(paramsObj) ? paramsObj : null;
 };

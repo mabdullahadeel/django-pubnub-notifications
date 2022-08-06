@@ -90,7 +90,8 @@ export const PostCommentField: React.FC<PostCommentFieldProps> = ({
           mb={2}
           w={{ lg: "auto", md: "auto", sm: "100%", base: "100%" }}
           colorScheme="red"
-          onClick={onSubmit}
+          type="submit"
+          onClick={handleSubmit(onSubmit)}
         >
           Comment
         </Button>
